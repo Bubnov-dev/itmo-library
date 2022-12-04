@@ -1,0 +1,70 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+book_new:
+    path: /books/new
+    controller: App\Controller\BookController::newBook
+    methods: GET
+
+book_delete:
+    path: /books/delete/{id}
+    controller: App\Controller\BookController::remove
+    methods: post
+
+
+book:
+    path: /books/{id}
+    controller: App\Controller\BookController::index
+    methods: GET
+
+book_list:
+    path: /books
+    controller: App\Controller\BookController::list
+    methods: GET
+
+book_update:
+    path: /books/{id}
+    controller: App\Controller\BookController::update
+    methods: POST
+
+book_create:
+    path: /books/
+    controller: App\Controller\BookController::create
+    methods: POST
+
+
+
+author_new:
+    path: /authors/new
+    controller: App\Controller\AuthorController::newAuthor
+    methods: GET
+
+author_delete:
+    path: /authors/delete/{id}
+    controller: App\Controller\AuthorController::remove
+    methods: post
+
+
+author:
+    path: /authors/{id}
+    controller: App\Controller\AuthorController::index
+    methods: GET
+
+author_list:
+    path: /authors
+    controller: App\Controller\AuthorController::list
+    methods: GET
+
+author_update:
+    path: /authors/{id}
+    controller: App\Controller\AuthorController::update
+    methods: POST
+
+author_create:
+    path: /authors/
+    controller: App\Controller\AuthorController::create
+    methods: POST
+

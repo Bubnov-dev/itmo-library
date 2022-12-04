@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello BookController!{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+        <h1>{{ book.name ?? 'Новая книга' }}</h1>
+        <form class="d-flex flex-column gap-3 my-3" method="post" action="/books/{{ book.id }}">
+            {% if book.id %}<input type="hidden" name="_method" value="PUT"/>{% endif %}
+            <div class="row">
+                <label class="col-3" for="">Название книги</label>
+                <input class="col-9 form-control" type="text" name="name" value="{{ book.name }}">
+            </div>
+            <div class="row">
+                <label class="col-3" for="">Год</label>
+                <input class="col-9 form-control" type="text" name="year" value="{{ book.year }}">
+            </div>
+            <div class="row">
+                <label class="col-3" for="">ISBN</label>
+                <input class="col-9 form-control" type="text" name="isbn" value="{{ book.isbn }}">
+            </div>
+            <div class="row">
+                <label class="col-3" for="">Количество страниц</label>
+                <input class="col-9 form-control" type="text" name="pageNumber" value="{{ book.pageNumber }}">
+            </div>
+            <button class="btn btn-primary">Сохранить</button>
+        </form>
+        {% if msg  is defined %}
+            <div class="alert alert-success" role="alert">
+                {{ msg }}
+            </div>
+        {% endif %}
+        {% if errors  is defined %}
+            <div class="alert alert-danger" role="alert">
+                <ul>
+
+                {% for error in errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

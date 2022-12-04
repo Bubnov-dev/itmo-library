@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AuthorController!{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+        <h1>{{ author.name ?? 'Новая книга' }}</h1>
+        <form class="d-flex flex-column gap-3 my-3" method="post" action="/authors/{{ author.id }}">
+            {% if author.id %}<input type="hidden" name="_method" value="PUT"/>{% endif %}
+            <div class="row">
+                <label class="col-3" for="">Имя</label>
+                <input class="col-9 form-control" type="text" name="name" value="{{ author.name }}">
+            </div>
+            <div class="row">
+                <label class="col-3" for="">Фамилия</label>
+                <input class="col-9 form-control" type="text" name="surname" value="{{ author.surname }}">
+            </div>
+            <div class="row">
+                <label class="col-3" for="">Отчество</label>
+                <input class="col-9 form-control" type="text" name="patronymic" value="{{ author.patronymic }}">
+            </div>
+
+            <button class="btn btn-primary">Сохранить</button>
+        </form>
+        {% if msg  is defined %}
+            <div class="alert alert-success" role="alert">
+                {{ msg }}
+            </div>
+        {% endif %}
+        {% if errors  is defined %}
+            <div class="alert alert-danger" role="alert">
+                <ul>
+
+                    {% for error in errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}
