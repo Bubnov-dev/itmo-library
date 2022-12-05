@@ -9,6 +9,7 @@ class BookService{
 
 
     /**
+     * set params of book by request
      * @param Request $request
      * @param Book $book
      * @return void

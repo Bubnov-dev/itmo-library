@@ -7,6 +7,12 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AuthorService
 {
+    /**
+     * set params of author by request
+     * @param Request $request
+     * @param Author $author
+     * @return void
+     */
     public static function setAuthor(Request $request, Author $author): void
     {
         $request->get('name') ? $author->setName($request->get('name') ): '';

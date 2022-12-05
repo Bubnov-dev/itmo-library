@@ -39,6 +39,14 @@ class BookRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * get entities, by condition, that should be unique
+     * @param $id
+     * @param $name
+     * @param $year
+     * @param $isbn
+     * @return mixed
+     */
     public function getUniques($id, $name, $year, $isbn)
     {
         $q =  $this->createQueryBuilder('p')->where('p.name = :name and p.year = 

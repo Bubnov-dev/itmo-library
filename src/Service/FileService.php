@@ -23,6 +23,11 @@ class FileService
         $this->fileRepository = $fileRepository;
     }
 
+    /**
+     * saving uploaded file and store it in uploads
+     * @param $file
+     * @return File
+     */
     public function save($file)
     {
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
@@ -47,6 +52,11 @@ class FileService
         return $fileEntity;
     }
 
+    /**
+     * deleting file Entity and file from, uploads
+     * @param $file
+     * @return void
+     */
     public function delete($file)
     {
         if ($file) {

@@ -20,7 +20,8 @@ class AuthorValidator extends BaseValidator
     {
         $errors = parent::validate($entity);
 
-        if(count($this->authorRepository->getUniques($entity->getName(), $entity->getSurname(),
+        if(count($this->authorRepository->getUniques($entity->getId(), $entity->getName(),
+                                                     $entity->getSurname(),
             $entity->getPatronymic()))){
             $errors[] = 'not unique author';
         }

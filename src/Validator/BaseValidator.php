@@ -5,7 +5,10 @@ namespace App\Validator;
 use App\Entity\EntityInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class BaseValidator
+/**
+ * Custom Validotor class to appaend custom validate function to usual validator
+ */
+Abstract class BaseValidator
 {
     private $validator;
 
