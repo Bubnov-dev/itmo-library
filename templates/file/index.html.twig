@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello FileController!{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+        <h2>
+            Новый файл
+        </h2>
+        <form action="{{ path('file_create') }}" method="POST" enctype="multipart/form-data">
+            <input class="form-control" type="file" name="file">
+            <button class="btn btn-primary">Сохранить</button>
+        </form>
+
+        <h2>Файлы</h2>
+        <ul>
+            {% for file in files %}
+                <li class="d-flex gap-3">
+                    <a href="file:///{{ file.path }}">{{ file.name }}</a>
+                    <code>{{ file.path }}</code>
+                    <form method="POST" action="{{ path('file_delete', {id : file.id}) }}">
+                        <button class="btn btn-primary">Удалить</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% endblock %}
