@@ -6,8 +6,13 @@
     <div class="container">
 
         <h1>{{ book.name ?? 'Новая книга' }}</h1>
-        <form class="d-flex flex-column gap-3 my-3" method="post" action="/books/{{ book.id }}">
+        <form class="d-flex flex-column gap-3 my-3" method="post" action="/books/{{ book.id }}" method="POST" enctype="multipart/form-data">
             {% if book.id %}<input type="hidden" name="_method" value="PUT"/>{% endif %}
+
+            <div class="row">
+                <label class="col-3" for="">Обложка</label>
+                <input class="col-9 form-control" type="file" name="image" >
+            </div>
             <div class="row">
                 <label class="col-3" for="">Название книги</label>
                 <input class="col-9 form-control" type="text" name="name" value="{{ book.name }}">
@@ -42,6 +47,25 @@
 
             </div>
         {% endif %}
+        {% if book.id  != null %}
+
+        <h2 class="my-3">Авторы книги</h2>
+        <ul>
+            {% for author in book.getAuthors() %}
+
+                <li><a href="{{ path('author', {id : author.id}) }}">{{ author.name }} {{ author.surname }} {{ author.patronymic }}</a></li>
+            {% endfor %}
+        </ul>
+
+        <h3>Добавить автора (поиск реализован только на странице автора)</h3>
+        <form action="{{  path('author_book') }}" method="POST">
+            <input type="text" name="authorId">
+            <label for="">id
+            <input type="hidden" name="bookId" value="{{ book   .id }}">
+            </label>
+            <button class="btn btn-primary">Добавить</button>
+        </form>
+        {%  endif %}
     </div>
 
 {% endblock %}

@@ -39,6 +39,65 @@
 
             </div>
         {% endif %}
-    </div>
+        {% if author.id  != null %}
 
+            <h2 class="my-3">Книги автора</h2>
+            <ul>
+                {% for book in author.getBooks() %}
+
+                    <li class="d-flex gap-3">
+                        <a href="{{ path('book', {id : book.id}) }}">{{ book.name }} - {{ book.year }}</a>
+                        <form action="{{ path('author_book_delete') }}" method="POST">
+                            <input type="hidden" name="authorId" value="{{ author.id }}">
+                            <input type="hidden" name="bookId" value="{{ book.id }}">
+                            <button class="btn btn-primary">Удалить запись</button>
+                        </form>
+
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <h3>Добавить книгу</h3>
+            <h6>%Like% Поиск (результаты отобразятся в селекте)</h6>
+
+            <label for="" class="d-flex gap-3">
+                <input class="form-control" type="text" id="bookName">
+                <button id="search-btn" class="btn btn-primary">
+                    Поиск
+                </button>
+            </label>
+            <form action="{{ path('author_book') }}" method="POST" class="d-flex gap-3">
+                <input type="hidden" name="authorId" value="{{ author.id }}">
+                <select class="form-control" id="bookSelect" type="text" name="bookId">
+                </select>
+                <button class="btn btn-primary">Добавить</button>
+            </form>
+        {% endif %}
+
+    </div>
+    <script>
+        $(document).ready(() => {
+            $('#search-btn').on('click', () => {
+                $.ajax({
+                    url: '/books/search?name=' + $('#bookName').val(),
+                    success: msg => {
+                        console.log(msg)
+                        if(msg.length == 0){
+                            alert('Ничего не найдено')
+                        }
+                        $('#bookSelect').html();
+                        msg.forEach(book => {
+                            $('#bookSelect').append('<option value="'+book.id+'">'+book.name +' - ' + book.year+ '</option>')
+                        })
+
+                    },
+
+                    error: error => {
+                        alert("Произошла непредвиденная ошибка. Ошибка в консоле")
+                        console.log(error)
+                    }
+                });
+            })
+        })
+    </script>
 {% endblock %}

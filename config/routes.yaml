@@ -4,6 +4,11 @@ controllers:
         namespace: App\Controller
     type: attribute
 
+book_search:
+    path: /books/search
+    controller: App\Controller\BookController::searchByName
+    methods: GET
+
 book_new:
     path: /books/new
     controller: App\Controller\BookController::newBook
@@ -14,6 +19,10 @@ book_delete:
     controller: App\Controller\BookController::remove
     methods: post
 
+base:
+    path: /
+    controller: App\Controller\BookController::list
+    methods: GET
 
 book:
     path: /books/{id}
@@ -42,6 +51,16 @@ author_new:
     controller: App\Controller\AuthorController::newAuthor
     methods: GET
 
+author_book:
+    path: /authors/book
+    controller: App\Controller\AuthorController::addBook
+    methods: POST
+
+author_book_delete:
+    path: /authors/book-delete
+    controller: App\Controller\AuthorController::removeBook
+    methods: POST
+
 author_delete:
     path: /authors/delete/{id}
     controller: App\Controller\AuthorController::remove
@@ -68,3 +87,18 @@ author_create:
     controller: App\Controller\AuthorController::create
     methods: POST
 
+
+files:
+    path: /files/
+    controller: App\Controller\FileController::index
+    methods: GET
+
+file_create:
+    path: /files/
+    controller: App\Controller\FileController::create
+    methods: POST
+
+file_delete:
+    path: /files/delete/id
+    controller: App\Controller\FileController::remove
+    methods: POST

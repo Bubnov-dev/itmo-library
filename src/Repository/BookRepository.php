@@ -39,11 +39,23 @@ class BookRepository extends ServiceEntityRepository
         }
     }
 
-    public function getUniques($name, $year, $isbn)
+    public function getUniques($id, $name, $year, $isbn)
     {
-        return $this->createQueryBuilder('p')->where('p.name = :name and p.year = 
+        $q =  $this->createQueryBuilder('p')->where('p.name = :name and p.year = 
         :year')->orWhere('p.name = :name and p.ISBN = :isbn')->setParameters([
-            'name' => $name, 'year' => $year, 'isbn' => $isbn])->getQuery()->execute();
+            'name' => $name, 'year' => $year, 'isbn' => $isbn]);
+
+        if($id){
+            $q = $q->andWhere('p.id != :id')->setParameter('id', $id);
+        }
+        $q = $q->getQuery()->execute();
+        return $q;
+    }
+
+    public function searchByName($name){
+        return $this->createQueryBuilder('p')->where('p.name like :name')
+            ->setParameters([
+            'name' => '%'.$name.'%'])->getQuery()->execute();
     }
 
 }

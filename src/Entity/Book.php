@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
-class Book
+class Book implements EntityInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -32,6 +32,9 @@ class Book
 
     #[ORM\ManyToMany(targetEntity: Author::class, inversedBy: 'books')]
     private Collection $authors;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?File $image = null;
 
     public function __construct()
     {
@@ -125,5 +128,17 @@ class Book
         $metadata->addPropertyConstraint('ISBN', new Assert\Positive());
         $metadata->addPropertyConstraint('pageNumber', new Assert\Positive());
 
+    }
+
+    public function getImage(): ?File
+    {
+        return $this->image;
+    }
+
+    public function setImage(?File $image): self
+    {
+        $this->image = $image;
+
+        return $this;
     }
 }

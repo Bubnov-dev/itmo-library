@@ -6,26 +6,22 @@ use App\Entity\Author;
 use App\Repository\AuthorRepository;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class AuthorValidator
+class AuthorValidator extends BaseValidator
 {
-    private $authorRepository, $validator;
+    private AuthorRepository $authorRepository;
 
-    public function __construct(AuthorRepository $authorRepository, ValidatorInterface $validator)
+    public function __construct(ValidatorInterface $validator, AuthorRepository $authorRepository,)
     {
+        parent::__construct($validator);
         $this->authorRepository = $authorRepository;
-        $this->validator = $validator;
     }
 
-    public  function validate(Author $author)
+    public  function validate(Author|\App\Entity\EntityInterface $entity): array
     {
-        $verrors = $this->validator->validate($author);
-        $errors = [];
-        foreach ($verrors as $message) {
-            $errors[] = $message->getPropertyPath() . ': ' . $message->getMessage();
-        }
+        $errors = parent::validate($entity);
 
-        if(count($this->authorRepository->getUniques($author->getName(), $author->getSurname(),
-            $author->getPatronymic()))){
+        if(count($this->authorRepository->getUniques($entity->getName(), $entity->getSurname(),
+            $entity->getPatronymic()))){
             $errors[] = 'not unique author';
         }
         return $errors;

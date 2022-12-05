@@ -6,23 +6,22 @@ use App\Entity\Book;
 use App\Repository\BookRepository;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class BookValidator
+class BookValidator extends BaseValidator
 {
-    private $bookRepository, $validator;
+    private BookRepository $bookRepository;
 
-    public function __construct(BookRepository $bookRepository, ValidatorInterface $validator)
+    public function __construct(ValidatorInterface $validator, BookRepository $bookRepository)
     {
+        parent::__construct($validator);
         $this->bookRepository = $bookRepository;
-        $this->validator = $validator;
     }
-    public  function validate(Book $book){
-        $verrors = $this->validator->validate($book);
-        $errors = [];
-        foreach ($verrors as $message) {
-            $errors[] = $message->getPropertyPath() . ': ' .$message->getMessage();
-        }
-        if(count($this->bookRepository->getUniques($book->getName(), $book->getYear(),
-            $book->getISBN()))){
+
+    public function validate(Book|\App\Entity\EntityInterface $entity): array
+    {
+        $errors = parent::validate($entity);
+        if (count($this->bookRepository->getUniques($entity->getId(), $entity->getName(),
+            $entity->getYear(),
+            $entity->getISBN()))) {
             $errors[] = 'not unique book';
         }
         return $errors;

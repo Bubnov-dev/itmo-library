@@ -9,25 +9,26 @@
             <h1 class="mb-3">Книги</h1>
             <div>
 
-                <a href="/books/new" class="btn btn-primary">Добавить</a>
+                <a href="{{ path('book_new') }}" class="btn btn-primary">Добавить</a>
             </div>
 
         </div>
 
         {% for book in books %}
             <div class="row p-3 border border-1">
+                <div class="col-1"><img src="{{ book.getImage() ? book.getImage().path : '' }}" alt=""></div>
                 <div class="col-1">{{ book.id }}</div>
                 <div class="col-2">
-                    <a href="/books/{{ book.id }}">
+                    <a href="{{ path('book', {id : book.id}) }}">
                         {{ book.name }}
                     </a>
                 </div>
                 <div class="col-2">{{ book.isbn }}</div>
                 <div class="col-2">{{ book.year }}</div>
                 <div class="col-1">{{ book.pageNumber }}</div>
-                <div class="col-3">{% for author in  book.getAuthors() %} {{ authorr.name }} {% endfor %}</div>
+                <div class="col-1">{% for author in  book.getAuthors() %}<a href="{{ path('author', {id: author.id}) }}">{{ author.name }}, </a>{% endfor %}</div>
                 <div class="col-1">
-                    <form method="POST" action="/books/delete/{{ book.id }}">
+                    <form method="POST" action="{{ path('book_delete', {id : book.id}) }}">
                         <button class="btn btn-primary">Удалить</button>
                     </form>
 
