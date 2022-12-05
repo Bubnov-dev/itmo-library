@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\File;
+use App\Repository\BookRepository;
 use App\Repository\FileRepository;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -15,12 +16,14 @@ class FileService
     private FileRepository $fileRepository;
     private $appKernel;
 
-    public function __construct(SluggerInterface $slugger, FileRepository $fileRepository, KernelInterface $appKernel)
+    public function __construct(SluggerInterface $slugger, FileRepository
+    $fileRepository, KernelInterface $appKernel, BookRepository $bookRepository)
     {
 
         $this->appKernel = $appKernel;
         $this->slugger = $slugger;
         $this->fileRepository = $fileRepository;
+        $this->bookRepository = $bookRepository;
     }
 
     /**
@@ -63,6 +66,11 @@ class FileService
 
             $filesystem = new Filesystem();
             $filesystem->remove($file->getPath());
+            $book = $this->bookRepository->findOneBy(['image' => $file->getId()]);
+            if ($book){
+                $book->setImage(null);
+                $this->bookRepository->save($book);
+            }
             $this->fileRepository->remove($file);
         }
 

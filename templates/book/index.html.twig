@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello BookController!{% endblock %}
+{% block title %}{{ book.name ?? 'Новая книга' }}{% endblock %}
 
 {% block body %}
     <div class="container">
@@ -53,7 +53,14 @@
         <ul>
             {% for author in book.getAuthors() %}
 
-                <li><a href="{{ path('author', {id : author.id}) }}">{{ author.name }} {{ author.surname }} {{ author.patronymic }}</a></li>
+                <li class="d-flex gap-3">
+                    <a href="{{ path('author', {id : author.id}) }}">{{ author.name }} {{ author.surname }} {{ author.patronymic }}</a>
+                    <form action="{{ path('author_book_delete') }}" method="POST">
+                        <input type="hidden" name="authorId" value="{{ author.id }}">
+                        <input type="hidden" name="bookId" value="{{ book.id }}">
+                        <button class="btn btn-primary">Удалить запись</button>
+                    </form>
+                </li>
             {% endfor %}
         </ul>
 

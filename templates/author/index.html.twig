@@ -1,11 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AuthorController!{% endblock %}
+{% block title %}
+    {{ author.name ?? 'Новый автор' }}
+{% endblock %}
 
 {% block body %}
     <div class="container">
 
-        <h1>{{ author.name ?? 'Новая книга' }}</h1>
+        <h1>{{ author.name ?? 'Новый автор' }}</h1>
         <form class="d-flex flex-column gap-3 my-3" method="post" action="/authors/{{ author.id }}">
             {% if author.id %}<input type="hidden" name="_method" value="PUT"/>{% endif %}
             <div class="row">
@@ -60,12 +62,16 @@
             <h3>Добавить книгу</h3>
             <h6>%Like% Поиск (результаты отобразятся в селекте)</h6>
 
+            <form id="search-form">
+
             <label for="" class="d-flex gap-3">
                 <input class="form-control" type="text" id="bookName">
-                <button id="search-btn" class="btn btn-primary">
-                    Поиск
-                </button>
-            </label>
+                    <button id="search-btn" class="btn btn-primary">
+                        Поиск
+                    </button>
+                </label>
+            </form>
+
             <form action="{{ path('author_book') }}" method="POST" class="d-flex gap-3">
                 <input type="hidden" name="authorId" value="{{ author.id }}">
                 <select class="form-control" id="bookSelect" type="text" name="bookId">
@@ -77,7 +83,8 @@
     </div>
     <script>
         $(document).ready(() => {
-            $('#search-btn').on('click', () => {
+            $('#search-form').on('submit', (e) => {
+                e.preventDefault();
                 $.ajax({
                     url: '/books/search?name=' + $('#bookName').val(),
                     success: msg => {
@@ -85,7 +92,7 @@
                         if(msg.length == 0){
                             alert('Ничего не найдено')
                         }
-                        $('#bookSelect').html();
+                        $('#bookSelect').html("");
                         msg.forEach(book => {
                             $('#bookSelect').append('<option value="'+book.id+'">'+book.name +' - ' + book.year+ '</option>')
                         })

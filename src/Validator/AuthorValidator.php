@@ -16,13 +16,14 @@ class AuthorValidator extends BaseValidator
         $this->authorRepository = $authorRepository;
     }
 
-    public  function validate(Author|\App\Entity\EntityInterface $entity): array
+    public function validate(Author|\App\Entity\EntityInterface $entity): array
     {
         $errors = parent::validate($entity);
 
-        if(count($this->authorRepository->getUniques($entity->getId(), $entity->getName(),
-                                                     $entity->getSurname(),
-            $entity->getPatronymic()))){
+        if (count(
+            $this->authorRepository->getUniques($entity->getId(), $entity->getName(),
+                $entity->getSurname(), $entity->getPatronymic())
+        )) {
             $errors[] = 'not unique author';
         }
         return $errors;

@@ -8,7 +8,6 @@ use App\Repository\FileRepository;
 use App\Service\BookService;
 use App\Service\FileService;
 use App\Validator\BookValidator;
-use PHPUnit\Util\Json;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +19,6 @@ class BookController extends AbstractController
     private $bookRepository;
     private $bookValidator;
     private FileService $fileService;
-    private FileRepository $fileRepository;
 
 
     public function __construct(BookRepository $bookRepository, BookValidator $bookValidator, FileService $fileService, FileRepository $fileRepository)
@@ -28,7 +26,6 @@ class BookController extends AbstractController
         $this->bookRepository = $bookRepository;
         $this->bookValidator = $bookValidator;
         $this->fileService = $fileService;
-        $this->fileRepository = $fileRepository;
     }
 
     public function index(Request $request): Response
@@ -84,29 +81,29 @@ class BookController extends AbstractController
     public function update(Request $request): Response
     {
         $book = $this->bookRepository->findOneBy(['id' => $request->get('id')]);
-        if ($request->files->get('image')) {
-            $uploadedFile = $request->files->get('image');
-            $file = $this->fileService->save($uploadedFile);
-            $book->setImage($file);
-            $oldImageId = $book->getImage()->getId();
 
+
+        if ($request->files->get('image')) {
+            $file = $this->fileService->save($request->files->get('image'));
+            $oldImage = $book->getImage();
+            $book->setImage($file);
         }
 
         BookService::setBook($request, $book);
         $errors = $this->bookValidator->validate($book);
+
+
         if (count($errors)) {
             return $this->render('book/index.html.twig', [
                 'book' => $book,
                 'errors' => $errors
             ]);
         } else {
-
-            $this->bookRepository->save($book);
             if ($request->files->get('image')) {
-                $this->fileService->delete
-                ($this->fileRepository->findOneBy(['id' => $oldImageId]));
-            }
 
+                $this->fileService->delete($oldImage);
+            }
+            $this->bookRepository->save($book);
             $book = $this->bookRepository->findOneBy(['id' => $request->get('id')]);
             return $this->render('book/index.html.twig', [
                 'book' => $book,

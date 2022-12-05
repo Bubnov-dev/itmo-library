@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello authorController!{% endblock %}
+{% block title %}Авторы{% endblock %}
 
 {% block body %}
     <div class="container">
@@ -14,6 +14,17 @@
 
         </div>
 
+        <div class="row p-3 border border-1">
+
+        <div class="col-1">id</div>
+        <div class="col-2">
+            Имя
+        </div>
+        <div class="col-2">Фамилия</div>
+        <div class="col-2">Отчество</div>
+        <div class="col-3">Книги</div>
+            <div class="col-1"></div>
+        </div>
         {% for author in authors %}
             <div class="row p-3 border border-1">
                 <div class="col-1">{{ author.id }}</div>

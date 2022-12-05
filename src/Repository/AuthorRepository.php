@@ -49,16 +49,18 @@ class AuthorRepository extends ServiceEntityRepository
     public function getUniques($id, $name, $surname, $patronymic)
     {
         $q =  $this->createQueryBuilder('p')->where('p.name = :name and p.surname = 
-        :surname and p.patronymic = :patronymic');
+        :surname and p.patronymic = :patronymic')->setParameters([
+            'name' => $name, 'surname' => $surname, 'patronymic' => $patronymic]);
 
 
         if($id){
             $q = $q->andWhere('p.id != :id')->setParameter('id', $id);
         }
 
-        $q = $q->setParameters([
-            'name' => $name, 'surname' => $surname, 'patronymic' => $patronymic])
+        $q = $q
             ->getQuery()
             ->execute();
+
+        return $q;
     }
 }

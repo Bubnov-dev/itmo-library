@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello BookController!{% endblock %}
+{% block title %}Книги{% endblock %}
 
 {% block body %}
     <div class="container">
@@ -14,6 +14,17 @@
 
         </div>
 
+        <div class="row p-3 border border-1">
+            <div class="col-1">img</div>
+            <div class="col-1">id</div>
+            <div class="col-2">
+                Название
+            </div>
+            <div class="col-1">ISBN</div>
+            <div class="col-1">Год</div>
+            <div class="col-2">страницы</div>
+            <div class="col-2">Авторы</div>
+        </div>
         {% for book in books %}
             <div class="row p-3 border border-1">
                 <div class="col-1"><img src="{{ book.getImage() ? book.getImage().path : '' }}" alt=""></div>
@@ -23,10 +34,10 @@
                         {{ book.name }}
                     </a>
                 </div>
-                <div class="col-2">{{ book.isbn }}</div>
-                <div class="col-2">{{ book.year }}</div>
-                <div class="col-1">{{ book.pageNumber }}</div>
-                <div class="col-1">{% for author in  book.getAuthors() %}<a href="{{ path('author', {id: author.id}) }}">{{ author.name }}, </a>{% endfor %}</div>
+                <div class="col-1">{{ book.isbn }}</div>
+                <div class="col-1">{{ book.year }}</div>
+                <div class="col-2">{{ book.pageNumber }}</div>
+                <div class="col-2">{% for author in  book.getAuthors() %}<a href="{{ path('author', {id: author.id}) }}">{{ author.name }}, </a>{% endfor %}</div>
                 <div class="col-1">
                     <form method="POST" action="{{ path('book_delete', {id : book.id}) }}">
                         <button class="btn btn-primary">Удалить</button>
